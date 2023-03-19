@@ -66,7 +66,7 @@ export default {
         value: value,
       };
       try {
-        const tx = await this.numberGuessingGame.playGame(this.guess, overrides);
+        const tx = await this.numberGuessingGame.play(this.guess, overrides);
         await tx.wait();
         this.isPlaying = false;
         this.isWinning = true;
