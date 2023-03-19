@@ -1,0 +1,31 @@
+Arguments: 
+  /Users/dennis/.nvm/versions/node/v16.16.0/bin/node /Users/dennis/.nvm/versions/node/v16.16.0/bin/yarn init -y
+
+PATH: 
+  /Users/dennis/Library/pnpm:/Users/dennis/.pyenv/plugins/pyenv-virtualenv/shims:/Users/dennis/.pyenv/shims:/Users/dennis/.pyenv/bin:/Users/dennis/.nvm/versions/node/v16.16.0/bin:/opt/homebrew/bin:/opt/homebrew/sbin:/usr/local/bin:/System/Cryptexes/App/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin:/Users/dennis/.cargo/bin
+
+Yarn version: 
+  1.22.19
+
+Node version: 
+  16.16.0
+
+Platform: 
+  darwin arm64
+
+Trace: 
+  SyntaxError: /Users/dennis/Code/number-guesser/server/package.json: Unexpected end of JSON input
+      at JSON.parse (<anonymous>)
+      at /Users/dennis/.nvm/versions/node/v16.16.0/lib/node_modules/yarn/lib/cli.js:1629:59
+      at Generator.next (<anonymous>)
+      at step (/Users/dennis/.nvm/versions/node/v16.16.0/lib/node_modules/yarn/lib/cli.js:310:30)
+      at /Users/dennis/.nvm/versions/node/v16.16.0/lib/node_modules/yarn/lib/cli.js:321:13
+
+npm manifest: 
+  
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile
