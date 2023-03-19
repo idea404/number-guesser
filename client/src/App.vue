@@ -18,12 +18,12 @@
 </template>
 
 <script>
-import * as zksync from "zksync-web3";
+// import * as zksync from "zksync-web3";
 import * as ethers from "ethers";
-import LuckyGuessToken from "../../server/artifacts-zk/contracts/token.sol/LuckyGuessToken.json";
+// import LuckyGuessToken from "../../server/artifacts-zk/contracts/token.sol/LuckyGuessToken.json";
 import NumberGuessingGame from "../../server/artifacts-zk/contracts/game.sol/NumberGuessingGame.json";
 
-const NETWORK = "https://zksync2-testnet.zksync.dev";
+// const NETWORK = "https://zksync2-testnet.zksync.dev";
 const PRIVATE_KEY = process.env.ZKS_PRIVATE_KEY || "";
 if (!PRIVATE_KEY) {
   throw new Error("Please set ZKS_PRIVATE_KEY in the environment variables.");
@@ -46,9 +46,10 @@ export default {
   methods: {
     async connectToZKSync() {
       if (typeof window.ethereum !== "undefined") {
-        const ethProvider = ethers.getDefaultProvider("goerli");
+        this.provider = ethers.getDefaultProvider("goerli");
         // const zkSyncProvider = await zksync.Provider(NETWORK);
-        this.numberGuessingGame = new ethers.Contract(GAME_CONTRACT_ADDRESS, NumberGuessingGame.abi, ethProvider);
+        this.numberGuessingGame = new ethers.Contract(GAME_CONTRACT_ADDRESS, NumberGuessingGame.abi, this.provider);
+        this.rewardAvailable = ethers.utils.formatEther(await this.provider.getBalance(GAME_CONTRACT_ADDRESS));
       } else {
         console.log("Please install MetaMask!");
       }
@@ -64,12 +65,12 @@ export default {
         const events = receipt.events || [];
         const lostEvent = events.find((event) => event.event === "Lost");
         if (lostEvent) {
-          const numberGuessingGameBalance = await this.numberGuessingGame.contractValue;
-          this.rewardAvailable = ethers.utils.formatEther(numberGuessingGameBalance);
+          const numberGuessingGameBalance = ethers.utils.formatEther(await this.provider.getBalance(GAME_CONTRACT_ADDRESS));
+          this.rewardAvailable = numberGuessingGameBalance;
           return;
         }
-        const numberGuessingGameBalance = await this.numberGuessingGame.contractValue;
-        this.rewardAvailable = ethers.utils.formatEther(numberGuessingGameBalance.sub(value));
+        const numberGuessingGameBalance = ethers.utils.formatEther(await this.provider.getBalance(GAME_CONTRACT_ADDRESS));
+        this.rewardAvailable = numberGuessingGameBalance.sub(value);
       } catch (error) {
         console.log(error);
       }
