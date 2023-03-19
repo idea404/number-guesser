@@ -2068,6 +2068,10 @@ contract LuckyGuessToken is AccessControlEnumerable, ERC20Burnable, ERC20Pausabl
         _mint(to, amount);
     }
 
+    function _mint(address account, uint256 amount) internal override(ERC20, ERC20Capped) {
+        super._mint(account, amount);
+    }
+
     function _beforeTokenTransfer(address from, address to, uint256 amount)
         internal
         whenNotPaused
