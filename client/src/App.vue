@@ -18,12 +18,18 @@
 </template>
 
 <script>
-import { Wallet } from "zksync";
-import { providers, Contract } from "zksync-web3";
+import * as zksync from "zksync-web3";
+import * as ethers from "ethers";
 import LuckyGuessToken from "../../server/artifacts-zk/contracts/token.sol/LuckyGuessToken.json";
 import NumberGuessingGame from "../../server/artifacts-zk/contracts/game.sol/NumberGuessingGame.json";
 
-const network = "zkSyncTestnet";
+const NETWORK = "https://zksync2-testnet.zksync.dev";
+const PRIVATE_KEY = process.env.ZKS_PRIVATE_KEY || "";
+if (!PRIVATE_KEY) {
+  throw new Error("Please set ZKS_PRIVATE_KEY in the environment variables.");
+}
+const GAME_CONTRACT_ADDRESS = "0x142210A453C17c7db82D84319f4dF25798ebB3F2";
+// const TOKEN_CONTRACT_ADDRESS = "0xc08aCd67c48818CaC2599Bfb585B411FFD5a0BF2";
 
 export default {
   name: "App",
@@ -40,16 +46,9 @@ export default {
   methods: {
     async connectToZKSync() {
       if (typeof window.ethereum !== "undefined") {
-        await window.ethereum.request({ method: "eth_requestAccounts" });
-        const ethersProvider = new ethers.providers.Web3Provider(window.ethereum);
-        const signer = ethersProvider.getSigner();
-        const syncProvider = await providers.getDefaultProvider(network);
-        const syncWallet = await Wallet.fromEthSigner(signer, syncProvider);
-        const contractAddress = NumberGuessingGame.networks[network].address;
-        this.numberGuessingGame = new Contract(contractAddress, NumberGuessingGame.abi, syncWallet.provider);
-        const tokenAddress = LuckyGuessToken.networks[network].address;
-        this.luckyGuessToken = new Contract(tokenAddress, LuckyGuessToken.abi, syncWallet.provider);
-        this.rewardAvailable = ethers.utils.formatEther(await this.numberGuessingGame.contractValue * 8 / 10);
+        const ethProvider = ethers.getDefaultProvider("goerli");
+        // const zkSyncProvider = await zksync.Provider(NETWORK);
+        this.numberGuessingGame = new ethers.Contract(GAME_CONTRACT_ADDRESS, NumberGuessingGame.abi, ethProvider);
       } else {
         console.log("Please install MetaMask!");
       }
