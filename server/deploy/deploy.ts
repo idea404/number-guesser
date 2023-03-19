@@ -30,13 +30,13 @@ async function deployContract(contract: string, hre: HardhatRuntimeEnvironment, 
 
   // OPTIONAL: Deposit funds to L2
   // Comment this block if you already have funds on zkSync.
-  const depositHandle = await deployer.zkWallet.deposit({
-    to: deployer.zkWallet.address,
-    token: utils.ETH_ADDRESS,
-    amount: deploymentFee.mul(2),
-  });
+  // const depositHandle = await deployer.zkWallet.deposit({
+  //   to: deployer.zkWallet.address,
+  //   token: utils.ETH_ADDRESS,
+  //   amount: deploymentFee.mul(2),
+  // });
   // Wait until the deposit is processed on zkSync
-  await depositHandle.wait();
+  // await depositHandle.wait();
 
   // Deploy this contract. The returned object will be of a `Contract` type, similarly to ones in `ethers`.
   // `greeting` is an argument for contract constructor.
