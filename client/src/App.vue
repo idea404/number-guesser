@@ -24,10 +24,6 @@ import * as ethers from "ethers";
 import NumberGuessingGame from "../../server/artifacts-zk/contracts/game.sol/NumberGuessingGame.json";
 
 // const NETWORK = "https://zksync2-testnet.zksync.dev";
-const PRIVATE_KEY = process.env.ZKS_PRIVATE_KEY || "";
-if (!PRIVATE_KEY) {
-  throw new Error("Please set ZKS_PRIVATE_KEY in the environment variables.");
-}
 const GAME_CONTRACT_ADDRESS = "0x142210A453C17c7db82D84319f4dF25798ebB3F2";
 // const TOKEN_CONTRACT_ADDRESS = "0xc08aCd67c48818CaC2599Bfb585B411FFD5a0BF2";
 
