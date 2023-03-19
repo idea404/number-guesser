@@ -34,6 +34,12 @@ export default {
       guess: 0,
       rewardAvailable: 0,
       tokens: 100,
+      provider: null,
+      signer: null,
+      numberGuessingGame: null,
+      isPlaying: false,
+      isWinning: false,
+      isLosing: false,
     };
   },
   async created() {
@@ -42,7 +48,9 @@ export default {
   methods: {
     async connectToZKSync() {
       if (typeof window.ethereum !== "undefined") {
-        this.provider = ethers.getDefaultProvider("goerli");
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
+        this.provider = new ethers.providers.Web3Provider(window.ethereum);
+        this.signer = this.provider.getSigner();
         // const zkSyncProvider = await zksync.Provider(NETWORK);
         this.numberGuessingGame = new ethers.Contract(GAME_CONTRACT_ADDRESS, NumberGuessingGame.abi, this.provider);
         this.rewardAvailable = ethers.utils.formatEther(await this.provider.getBalance(GAME_CONTRACT_ADDRESS));
@@ -51,6 +59,7 @@ export default {
       }
     },
     async submitGuess() {
+      this.isPlaying = true;
       const value = ethers.utils.parseEther("0.001");
       const overrides = {
         value: value,
@@ -61,10 +70,12 @@ export default {
         const events = receipt.events || [];
         const lostEvent = events.find((event) => event.event === "Lost");
         if (lostEvent) {
+          this.isLosing = true;
           const numberGuessingGameBalance = ethers.utils.formatEther(await this.provider.getBalance(GAME_CONTRACT_ADDRESS));
           this.rewardAvailable = numberGuessingGameBalance;
           return;
         }
+        this.isWinning = true;
         const numberGuessingGameBalance = ethers.utils.formatEther(await this.provider.getBalance(GAME_CONTRACT_ADDRESS));
         this.rewardAvailable = numberGuessingGameBalance.sub(value);
       } catch (error) {
