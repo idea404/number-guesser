@@ -19,8 +19,8 @@
 
 <script>
 import { ethers } from "ethers";
-import LuckyGuessToken from "./../contracts/abis/LuckyGuessToken.json";
-import NumberGuessingGame from "../../contracts/abis/NumberGuessingGame.json";
+import LuckyGuessToken from "../contracts/abis/LuckyGuessToken.json";
+import NumberGuessingGame from "../contracts/abis/NumberGuessingGame.json";
 
 export default {
   name: "App",
