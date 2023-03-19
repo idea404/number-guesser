@@ -20,8 +20,8 @@
 <script>
 import { Wallet } from "zksync";
 import { providers, Contract } from "zksync-web3";
-import LuckyGuessToken from "../../contracts/abis/LuckyGuessToken.json";
-import NumberGuessingGame from "../../contracts/abis/NumberGuessingGame.json";
+import LuckyGuessToken from "../../server/artifacts-zk/contracts/token.sol/LuckyGuessToken.json";
+import NumberGuessingGame from "../../server/artifacts-zk/contracts/game.sol/NumberGuessingGame.json";
 
 const network = "zkSyncTestnet";
 
