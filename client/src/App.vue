@@ -9,7 +9,7 @@
       <p>Submitting your guess...</p>
     </div>
     <div v-if="isWinning">
-      <p>Congratulations, you've won {{ reward }} ETH and {{ tokens }} LuckyGuessTokens!</p>
+      <p>Congratulations, you've won {{ rewardAvailable }} ETH and {{ tokens }} LuckyGuessTokens!</p>
     </div>
     <div v-if="isLosing">
       <p>Sorry, your guess was incorrect.</p>
@@ -30,11 +30,8 @@ export default {
   data() {
     return {
       guess: 0,
-      isPlaying: false,
-      isWinning: false,
-      isLosing: false,
-      reward: 0,
-      tokens: 0,
+      rewardAvailable: 0,
+      tokens: 100,
     };
   },
   async created() {
@@ -52,24 +49,30 @@ export default {
         this.numberGuessingGame = new Contract(contractAddress, NumberGuessingGame.abi, syncWallet.provider);
         const tokenAddress = LuckyGuessToken.networks[network].address;
         this.luckyGuessToken = new Contract(tokenAddress, LuckyGuessToken.abi, syncWallet.provider);
+        this.rewardAvailable = ethers.utils.formatEther(await this.numberGuessingGame.contractValue * 8 / 10);
       } else {
         console.log("Please install MetaMask!");
       }
     },
     async submitGuess() {
-      this.isPlaying = true;
+      const value = ethers.utils.parseEther("0.001");
+      const overrides = {
+        value: value,
+      };
       try {
-        const value = ethers.utils.parseEther("0.001");
-        const tx = await this.numberGuessingGame.play(this.guess, { value });
-        await tx.wait();
-        this.isPlaying = false;
-        this.isWinning = true;
-        this.reward = ethers.utils.formatEther(tx.value.mul(80).div(100));
-        this.tokens = ethers.utils.formatUnits(await this.luckyGuessToken.balanceOf(this.numberGuessingGame.signer.getAddress()));
+        const tx = await this.numberGuessingGame.play(this.guess, overrides);
+        const receipt = await tx.wait();
+        const events = receipt.events || [];
+        const lostEvent = events.find((event) => event.event === "Lost");
+        if (lostEvent) {
+          const numberGuessingGameBalance = await this.numberGuessingGame.contractValue;
+          this.rewardAvailable = ethers.utils.formatEther(numberGuessingGameBalance);
+          return;
+        }
+        const numberGuessingGameBalance = await this.numberGuessingGame.contractValue;
+        this.rewardAvailable = ethers.utils.formatEther(numberGuessingGameBalance.sub(value));
       } catch (error) {
         console.log(error);
-        this.isPlaying = false;
-        this.isLosing = true;
       }
     },
   },
