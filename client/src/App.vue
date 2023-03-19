@@ -23,7 +23,7 @@ import { providers, Contract } from "zksync-web3";
 import LuckyGuessToken from "../../contracts/abis/LuckyGuessToken.json";
 import NumberGuessingGame from "../../contracts/abis/NumberGuessingGame.json";
 
-const network = "rinkeby";
+const network = "zkSyncTestnet";
 
 export default {
   name: "App",
