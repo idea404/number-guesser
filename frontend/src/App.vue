@@ -2,7 +2,7 @@
   <div>
     <form>
       <label for="guess">Enter your guess:</label>
-      <input type="number" id="guess" v-model="guess" />
+      <input type="number" id="guess" v-model="guess">
       <button type="button" @click="submitGuess">Submit</button>
     </form>
     <div v-if="isPlaying">
@@ -18,12 +18,14 @@
 </template>
 
 <script>
-import { ethers } from "ethers";
-import LuckyGuessToken from "../contracts/abis/LuckyGuessToken.json";
-import NumberGuessingGame from "../contracts/abis/NumberGuessingGame.json";
+import { ethers } from 'ethers';
+import LuckyGuessToken from './contracts/LuckyGuessToken.json';
+import NumberGuessingGame from './contracts/NumberGuessingGame.json';
+
+const networkId = 31337;
 
 export default {
-  name: "App",
+  name: 'App',
   data() {
     return {
       guess: 0,
@@ -39,19 +41,27 @@ export default {
   },
   methods: {
     async connectToMetamask() {
-      if (typeof window.ethereum !== "undefined") {
-        await window.ethereum.request({ method: "eth_requestAccounts" });
+      if (typeof window.ethereum !== 'undefined') {
+        await window.ethereum.request({ method: 'eth_requestAccounts' });
         this.provider = new ethers.providers.Web3Provider(window.ethereum);
         this.signer = this.provider.getSigner();
-        this.luckyGuessToken = new ethers.Contract(LuckyGuessToken.networks[0].address, LuckyGuessToken.abi, this.signer);
-        this.numberGuessingGame = new ethers.Contract(NumberGuessingGame.networks[0].address, NumberGuessingGame.abi, this.signer);
+        this.luckyGuessToken = new ethers.Contract(
+          LuckyGuessToken.networks[networkId].address,
+          LuckyGuessToken.abi,
+          this.signer
+        );
+        this.numberGuessingGame = new ethers.Contract(
+          NumberGuessingGame.networks[networkId].address,
+          NumberGuessingGame.abi,
+          this.signer
+        );
       } else {
-        console.log("Please install MetaMask!");
+        console.log('Please install MetaMask!');
       }
     },
     async submitGuess() {
       this.isPlaying = true;
-      const value = ethers.utils.parseEther("0.001");
+      const value = ethers.utils.parseEther('0.001');
       const overrides = {
         value: value,
       };
