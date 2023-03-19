@@ -19,8 +19,8 @@
 
 <script>
 import { ethers } from 'ethers';
-import LuckyGuessToken from './contracts/LuckyGuessToken.json';
-import NumberGuessingGame from './contracts/NumberGuessingGame.json';
+import LuckyGuessToken from '../../contracts/abis/LuckyGuessToken.json';
+import NumberGuessingGame from '../../contracts/abis/NumberGuessingGame.json';
 
 const networkId = 31337;
 
