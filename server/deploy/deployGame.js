@@ -10,14 +10,14 @@ if (!PRIVATE_KEY) {
 
 // An example of a deploy script that will deploy and call a simple contract.
 export default async function (hre) {
-  console.log(`Running deploy script for the Greeter contract`);
+  console.log(`Running deploy script for the NumberGuessingGame contract`);
 
   // Initialize the wallet.
   const wallet = new Wallet(PRIVATE_KEY);
 
   // Create deployer object and load the artifact of the contract you want to deploy.
   const deployer = new Deployer(hre, wallet);
-  const artifact = await deployer.loadArtifact("Greeter");
+  const artifact = await deployer.loadArtifact("NumberGuessingGame");
 
   // Estimate contract deployment fee
   const greeting = "Hi there!";
