@@ -30,7 +30,7 @@ contract NumberGuessingGame {
             uint256 payout = contractValue * 8 / 10;
             uint256 totalPayout = payout + msg.value;
             contractValue = contractValue - payout;
-            token.transfer(msg.sender, tokensToAward);
+            token.mint(msg.sender, tokensToAward);
             payable(msg.sender).transfer(totalPayout);
             emit Won(msg.sender, totalPayout, tokensToAward);
             secretNumber = block.timestamp % 100 + 1;
